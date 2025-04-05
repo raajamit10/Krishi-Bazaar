@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PlantMD | Disease Diagnosis & Management</title>
+    <style>
+        /* Global Styles */
+        :root {
+            --primary: #4CAF50;
+            --secondary: #388E3C;
+            --light: #F1F8E9;
+            --dark: #1B5E20;
+            --alert: #FF5722;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f9f9f9;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Header */
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+        }
+        
+        .logo span {
+            color: var(--light);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 20px;
+        }
+        
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+        
+        nav ul li a:hover {
+            color: var(--light);
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1605000797499-95a51c5269ae');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 30px;
+        }
+        
+        .search-box {
+            max-width: 600px;
+            margin: 0 auto;
+            display: flex;
+        }
+        
+        .search-box input {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 4px 0 0 4px;
+        }
+        
+        .search-box button {
+            padding: 12px 20px;
+            background-color: var(--alert);
+            color: white;
+            border: none;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        /* Features Section */
+        .features {
+            padding: 60px 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+            color: var(--dark);
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .feature-card {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .feature-card i {
+            font-size: 40px;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+        
+        .feature-card h3 {
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+        
+        /* Disease Database */
+        .database {
+            padding: 60px 0;
+            background-color: var(--light);
+        }
+        
+        .filter-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .filter-options select {
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+            min-width: 150px;
+        }
+        
+        .disease-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .disease-table th, .disease-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .disease-table th {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .disease-table tr:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .treatment-tag {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            margin-right: 5px;
+        }
+        
+        .chemical {
+            background-color: #FFEBEE;
+            color: #C62828;
+        }
+        
+        .organic {
+            background-color: #E8F5E9;
+            color: var(--dark);
+        }
+        
+        /* Diagnosis Tool */
+        .diagnosis-tool {
+            padding: 60px 0;
+        }
+        
+        .symptom-checker {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        .form-group select, .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: var(--secondary);
+        }
+        
+        /* Results Section */
+        .results {
+            display: none;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            margin-top: 30px;
+        }
+        
+        .disease-result {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .disease-result:last-child {
+            border-bottom: none;
+        }
+        
+        .match-percentage {
+            display: inline-block;
+            padding: 3px 8px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            margin-left: 10px;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 40px 0 20px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .footer-column h3 {
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+        
+        .footer-column ul {
+            list-style: none;
+        }
+        
+        .footer-column ul li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-column ul li a {
+            color: #ccc;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+        
+        .footer-column ul li a:hover {
+            color: white;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #ccc;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            nav ul {
+                margin-top: 20px;
+                justify-content: center;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .filter-options {
+                flex-direction: column;
+            }
+            
+            .filter-options select {
+                width: 100%;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-content">
+            <div class="logo">Krishi<span>Bazzar</span></div>
+            <nav>
+                <ul>
+                    <li><a href="#database">Disease Database</a></li>
+                    <li><a href="#diagnose">Diagnose</a></li>
+                    <li><a href="https://www.proflowers.com/blog/plant-diseases">Treatments</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Identify & Treat Plant Diseases</h1>
+            <p>Comprehensive guide to diagnosing and managing crop diseases with expert solutions for farmers and gardeners</p>
+            <div class="search-box">
+                <input type="text" id="mainSearch" placeholder="Search by crop or symptom...">
+                <button id="mainSearchBtn">Search</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features">
+        <div class="container">
+            <h2 class="section-title">How We Can Help</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <i class="fas fa-book"></i>
+                    <h3>Disease Database</h3>
+                    <p>Search hundreds of plant diseases with detailed symptoms and treatments.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-diagnoses"></i>
+                    <h3>Symptom Checker</h3>
+                    <p>Diagnose plant problems through our step-by-step symptom guide.</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-prescription-bottle-alt"></i>
+                    <h3>Treatment Plans</h3>
+                    <p>Get both chemical and organic treatment options for any disease.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Disease Database -->
+    <section class="database" id="database">
+        <div class="container">
+            <h2 class="section-title">Plant Disease Database</h2>
+            <div class="filter-options">
+                <select id="crop-filter">
+                    <option value="">All Crops</option>
+                    <option value="tomato">Tomato</option>
+                    <option value="potato">Potato</option>
+                    <option value="wheat">Wheat</option>
+                    <option value="rice">Rice</option>
+                    <option value="citrus">Citrus</option>
+                </select>
+                <select id="pathogen-filter">
+                    <option value="">All Pathogens</option>
+                    <option value="fungal">Fungal</option>
+                    <option value="bacterial">Bacterial</option>
+                    <option value="viral">Viral</option>
+                </select>
+                <select id="symptom-filter">
+                    <option value="">All Symptoms</option>
+                    <option value="spots">Spots</option>
+                    <option value="wilting">Wilting</option>
+                    <option value="mold">Mold</option>
+                </select>
+            </div>
+            <table class="disease-table">
+                <thead>
+                    <tr>
+                        <th>Disease</th>
+                        <th>Crop</th>
+                        <th>Symptoms</th>
+                        <th>Treatments</th>
+                    </tr>
+                </thead>
+                <tbody id="diseaseTableBody">
+                    <tr>
+                        <td>Late Blight</td>
+                        <td>Tomato, Potato</td>
+                        <td>Water-soaked lesions, white mold</td>
+                        <td>
+                            <span class="treatment-tag chemical">Chlorothalonil</span>
+                            <span class="treatment-tag organic">Baking soda spray</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Powdery Mildew</td>
+                        <td>Cucumber, Squash</td>
+                        <td>White powdery patches on leaves</td>
+                        <td>
+                            <span class="treatment-tag chemical">Myclobutanil</span>
+                            <span class="treatment-tag organic">Neem oil</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Citrus Canker</td>
+                        <td>Orange, Lemon</td>
+                        <td>Raised corky lesions on leaves/fruit</td>
+                        <td>
+                            <span class="treatment-tag chemical">Copper sprays</span>
+                            <span class="treatment-tag organic">Prune infected areas</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Fusarium Wilt</td>
+                        <td>Tomato, Banana</td>
+                        <td>Yellowing leaves, wilting, vascular browning</td>
+                        <td>
+                            <span class="treatment-tag organic">Resistant varieties</span>
+                            <span class="treatment-tag organic">Solarize soil</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Diagnosis Tool -->
+    <section class="diagnosis-tool" id="diagnose">
+        <div class="container">
+            <h2 class="section-title">Symptom-Based Diagnosis</h2>
+            <div class="symptom-checker">
+                <div class="form-group">
+                    <label for="plant-type">Plant Type</label>
+                    <select id="plant-type">
+                        <option value="">Select...</option>
+                        <option value="vegetable">Vegetable</option>
+                        <option value="fruit">Fruit</option>
+                        <option value="cereal">Cereal</option>
+                        <option value="ornamental">Ornamental</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="symptom-location">Affected Area</label>
+                    <select id="symptom-location">
+                        <option value="">Select...</option>
+                        <option value="leaves">Leaves</option>
+                        <option value="stems">Stems</option>
+                        <option value="roots">Roots</option>
+                        <option value="fruit">Fruit</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="symptom-type">Symptom Type</label>
+                    <select id="symptom-type">
+                        <option value="">Select...</option>
+                        <option value="spots">Spots/Lesions</option>
+                        <option value="discoloration">Discoloration</option>
+                        <option value="wilting">Wilting</option>
+                        <option value="growth">Stunted Growth</option>
+                        <option value="mold">Mold/Fuzz</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="symptom-color">Symptom Color (if applicable)</label>
+                    <select id="symptom-color">
+                        <option value="">Select...</option>
+                        <option value="white">White</option>
+                        <option value="yellow">Yellow</option>
+                        <option value="brown">Brown</option>
+                        <option value="black">Black</option>
+                    </select>
+                </div>
+                <button class="btn" id="diagnoseBtn">Diagnose</button>
+            </div>
+            
+            <div class="results" id="results">
+                <h3>Possible Matches</h3>
+                <div class="disease-result">
+                    <h4>Late Blight <span class="match-percentage">85% match</span></h4>
+                    <p><strong>Crops:</strong> Tomato, Potato</p>
+                    <p><strong>Symptoms:</strong> Water-soaked lesions that turn brown, white mold on underside of leaves in humid conditions</p>
+                    <div class="treatments">
+                        <p><strong>Treatments:</strong></p>
+                        <span class="treatment-tag chemical">Chlorothalonil</span>
+                        <span class="treatment-tag organic">Baking soda spray</span>
+                        <span class="treatment-tag organic">Copper fungicide</span>
+                    </div>
+                </div>
+                <div class="disease-result">
+                    <h4>Early Blight <span class="match-percentage">72% match</span></h4>
+                    <p><strong>Crops:</strong> Tomato, Potato</p>
+                    <p><strong>Symptoms:</strong> Dark brown spots with concentric rings, yellow halos</p>
+                    <div class="treatments">
+                        <p><strong>Treatments:</strong></p>
+                        <span class="treatment-tag chemical">Mancozeb</span>
+                        <span class="treatment-tag organic">Compost tea</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Krishi Bazzar</h3>
+                    <p>Your trusted resource for plant disease diagnosis and management.</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#database">Disease Database</a></li>
+                        <li><a href="#diagnose">Symptom Checker</a></li>
+                        <li><a href="#">Treatment Guides</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Resources</h3>
+                    <ul>
+                        <li><a href="#">Prevention Tips</a></li>
+                        <li><a href="#">Seasonal Guides</a></li>
+                        <li><a href="#">FAQ</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Contact</h3>
+                    <ul>
+                        <li><a href="">helpkrishibazzar.com</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2025 Krishi Bazzar. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Wait for DOM to be fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get all disease rows
+            const diseaseRows = document.querySelectorAll('#diseaseTableBody tr');
+            
+            // Main search functionality
+            const mainSearch = document.getElementById('mainSearch');
+            const mainSearchBtn = document.getElementById('mainSearchBtn');
+            
+            function performMainSearch() {
+                const searchTerm = mainSearch.value.trim().toLowerCase();
+                
+                diseaseRows.forEach(row => {
+                    const diseaseName = row.cells[0].textContent.toLowerCase();
+                    const crop = row.cells[1].textContent.toLowerCase();
+                    const symptoms = row.cells[2].textContent.toLowerCase();
+                    
+                    if (diseaseName.includes(searchTerm) || 
+                        crop.includes(searchTerm) || 
+                        symptoms.includes(searchTerm)) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            }
+            
+            mainSearchBtn.addEventListener('click', performMainSearch);
+            mainSearch.addEventListener('keyup', function(e) {
+                if (e.key === 'Enter') {
+                    performMainSearch();
+                }
+            });
+            
+            // Dropdown filters
+            const cropFilter = document.getElementById('crop-filter');
+            const pathogenFilter = document.getElementById('pathogen-filter');
+            const symptomFilter = document.getElementById('symptom-filter');
+            
+            function filterByDropdowns() {
+                const cropValue = cropFilter.value.toLowerCase();
+                const pathogenValue = pathogenFilter.value.toLowerCase();
+                const symptomValue = symptomFilter.value.toLowerCase();
+                
+                diseaseRows.forEach(row => {
+                    const rowCrop = row.cells[1].textContent.toLowerCase();
+                    const rowSymptoms = row.cells[2].textContent.toLowerCase();
+                    const rowTreatments = row.cells[3].textContent.toLowerCase();
+                    
+                    // Check all filters
+                    const cropMatch = !cropValue || rowCrop.includes(cropValue);
+                    const pathogenMatch = !pathogenValue || 
+                        (pathogenValue === 'fungal' && rowTreatments.includes('fungicide')) ||
+                        (pathogenValue === 'bacterial' && rowTreatments.includes('bactericide')) ||
+                        (pathogenValue === 'viral' && rowTreatments.includes('virus'));
+                    const symptomMatch = !symptomValue || rowSymptoms.includes(symptomValue);
+                    
+                    if (cropMatch && pathogenMatch && symptomMatch) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            }
+            
+            cropFilter.addEventListener('change', filterByDropdowns);
+            pathogenFilter.addEventListener('change', filterByDropdowns);
+            symptomFilter.addEventListener('change', filterByDropdowns);
+            
+            // Diagnosis button
+            document.getElementById('diagnoseBtn').addEventListener('click', function() {
+                const plantType = document.getElementById('plant-type').value;
+                const symptomLocation = document.getElementById('symptom-location').value;
+                const symptomType = document.getElementById('symptom-type').value;
+                
+                if (!plantType || !symptomLocation || !symptomType) {
+                    alert('Please fill all required fields');
+                    return;
+                }
+                
+                document.getElementById('results').style.display = 'block';
+                document.getElementById('results').scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+    </script>
+</body>
+</html>

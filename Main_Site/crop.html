@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Major Crops of India</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        header {
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            padding: 1.5rem;
+            position: relative;
+        }
+        .logo {
+            position: absolute;
+            left: 20px;
+            top: 15px;
+            height: 50px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .filter-container {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 20px;
+        }
+        .filter-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        .filter-btn {
+            background: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .filter-btn::after {
+            content: "▼";
+            font-size: 0.8em;
+        }
+        .filter-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            background: white;
+            min-width: 160px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            z-index: 1;
+            border-radius: 4px;
+        }
+        .filter-content a {
+            color: #333;
+            padding: 10px 15px;
+            text-decoration: none;
+            display: block;
+        }
+        .filter-content a:hover {
+            background: #f1f1f1;
+        }
+        .filter-dropdown:hover .filter-content {
+            display: block;
+        }
+        .crop-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            background: #fff;
+            display: flex;
+            gap: 20px;
+        }
+        .crop-image {
+            width: 200px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+        .crop-info {
+            flex: 1;
+        }
+        h2 {
+            color: #2E7D32;
+            margin-top: 0;
+        
+        }
+        /* Footer Styles */
+footer {
+    background-color: #8BC34A;
+    color: #480fc2;
+    padding: 20px 0;
+    text-align: center;
+}
+
+footer .footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+footer .footer-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+footer .footer-links li {
+    display: inline;
+    margin-right: 15px;
+}
+
+footer .footer-links li a {
+    color: #0a33bac7;
+    text-decoration: none;
+}
+
+footer .footer-links li a:hover {
+    text-decoration: underline;
+}
+
+        .season-tag {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            margin-right: 5px;
+        }
+        .rabi {
+            background-color: #2196F3;
+            color: white;
+        }
+        .kharif {
+            background-color: #FF9800;
+            color: white;
+        }
+        .annual {
+            background-color: #9C27B0;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="" alt="Krishi Bazzar" class="logo">
+        <h1>Fasal Yojana</h1>
+        <p>Agriculture is the backbone of India's economy</p>
+    </header>
+
+    <div class="container">
+        <!-- Filter Dropdown (Top Right) -->
+        <div class="filter-container">
+            <div class="filter-dropdown">
+                <button class="filter-btn">Filter by Season</button>
+                <div class="filter-content">
+                    <a href="#" onclick="filterCrops('all')">All Crops</a>
+                    <a href="#" onclick="filterCrops('rabi')">Rabi (Winter)</a>
+                    <a href="#" onclick="filterCrops('kharif')">Kharif (Monsoon)</a>
+                    <a href="#" onclick="filterCrops('annual')">Annual</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Crop List -->
+        <div class="crop-list">
+            <!-- Wheat (Rabi) -->
+            <div class="crop-card" data-season="rabi">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Vehn%C3%A4pelto_6.jpg/330px-Vehn%C3%A4pelto_6.jpg" alt="Wheat" class="crop-image">
+                <div class="crop-info">
+                    <h2>Wheat <span class="season-tag rabi">Rabi</span></h2>
+                    <p><strong>Growing Season:</strong> November to April</p>
+                    <p><strong>Major States:</strong> Uttar Pradesh, Punjab, Haryana</p>
+                    <p><strong>Facts:</strong> India is the 2nd largest producer of wheat globally. It's a staple food in North India.</p>
+                </div>
+            </div>
+
+            <!-- Rice (Kharif) -->
+            <div class="crop-card" data-season="kharif">
+                <img src="https://cdn.britannica.com/89/140889-050-EC3F00BF/Ripening-heads-rice-Oryza-sativa.jpg?w=300" alt="Rice" class="crop-image">
+                <div class="crop-info">
+                    <h2>Rice <span class="season-tag kharif">Kharif</span></h2>
+                    <p><strong>Growing Season:</strong> June to November</p>
+                    <p><strong>Major States:</strong> West Bengal, Punjab, Uttar Pradesh</p>
+                    <p><strong>Facts:</strong> Staple food for 65% of India's population. India is the world's largest exporter of rice.</p>
+                </div>
+            </div>
+
+            <!-- Maize (Kharif) -->
+            <div class="crop-card" data-season="kharif">
+                <img src="https://t3.ftcdn.net/jpg/05/43/33/90/240_F_543339060_47tywFrfEyj9NdrZEw0DVxDSnBPHw5Jn.jpg" alt="Maize" class="crop-image">
+                <div class="crop-info">
+                    <h2>Maize <span class="season-tag kharif">Kharif</span></h2>
+                    <p><strong>Growing Season:</strong> June to September</p>
+                    <p><strong>Major States:</strong> Karnataka, Madhya Pradesh, Bihar</p>
+                    <p><strong>Facts:</strong> Third most important food crop after rice and wheat. Used for animal feed and industrial products.</p>
+                </div>
+            </div>
+
+            <!-- Cotton (Kharif) -->
+            <div class="crop-card" data-season="kharif">
+                <img src="https://media.istockphoto.com/id/1452319084/photo/beautiful-landscape-of-a-cotton-field-on-the-sunrise-in-mexico.jpg?s=612x612&w=0&k=20&c=5BsMStGGPqboob4Cq5RawX7GCYo_xe4-wrFVcmFFQrE=" alt="Cotton" class="crop-image">
+                <div class="crop-info">
+                    <h2>Cotton <span class="season-tag kharif">Kharif</span></h2>
+                    <p><strong>Growing Season:</strong> April to September</p>
+                    <p><strong>Major States:</strong> Gujarat, Maharashtra, Telangana</p>
+                    <p><strong>Facts:</strong> India is the world's largest producer of cotton. Known as "White Gold".</p>
+                </div>
+            </div>
+
+            <!-- Sugarcane (Annual) -->
+            <div class="crop-card" data-season="annual">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdP-unTECybUUFcrNRjvUWPcxkXHq0DjFIVw&s" alt="Sugarcane" class="crop-image">
+                <div class="crop-info">
+                    <h2>Sugarcane <span class="season-tag annual">Annual</span></h2>
+                    <p><strong>Growing Season:</strong> 12-18 month cycle</p>
+                    <p><strong>Major States:</strong> Maharashtra, Uttar Pradesh, Karnataka</p>
+                    <p><strong>Facts:</strong> India is the 2nd largest producer. Basis for sugar and jaggery industry.</p>
+                </div>
+            </div>
+
+            <!-- Millets (Kharif/Rabi) -->
+            <div class="crop-card" data-season="kharif rabi">
+                <img src="https://milletbank.in/cdn/shop/articles/pexels-deep-malik-132129520-10738421.jpg?v=1720854900&width=1400" alt="Millets" class="crop-image">
+                <div class="crop-info">
+                    <h2>Millets <span class="season-tag kharif">Kharif</span> <span class="season-tag rabi">Rabi</span></h2>
+                    <p><strong>Growing Season:</strong> June-November or November-March</p>
+                    <p><strong>Major States:</strong> Rajasthan, Karnataka, Maharashtra</p>
+                    <p><strong>Facts:</strong> Include Bajra, Jowar, Ragi. Highly nutritious and drought-resistant.</p>
+                </div>
+            </div>
+
+            <!-- Pulses (Rabi) -->
+            <div class="crop-card" data-season="rabi">
+                <img src="https://eng.ruralvoice.in/uploads/images/2023/12/image_750x_658fc09b22ef1.jpg" alt="Pulses" class="crop-image">
+                <div class="crop-info">
+                    <h2>Pulses <span class="season-tag rabi">Rabi</span></h2>
+                    <p><strong>Growing Season:</strong> October to March</p>
+                    <p><strong>Major States:</strong> Madhya Pradesh, Rajasthan, Maharashtra</p>
+                    <p><strong>Facts:</strong> Include chickpeas, lentils, peas. India is the largest producer and consumer.</p>
+                </div>
+            </div>
+
+            <!-- Tea (Annual) -->
+            <div class="crop-card" data-season="annual">
+                <img src="https://img.khetivyapar.com/images/blogs/1706957302-how-to-do-tea-farming-here-are-tips.jpg" alt="Tea" class="crop-image">
+                <div class="crop-info">
+                    <h2>Tea <span class="season-tag annual">Annual</span></h2>
+                    <p><strong>Growing Season:</strong> Year-round with flushes</p>
+                    <p><strong>Major States:</strong> Assam, West Bengal, Tamil Nadu</p>
+                    <p><strong>Facts:</strong> India is the 2nd largest tea producer. Assam tea is world famous.</p>
+                </div>
+            </div>
+
+            <!-- Coffee (Annual) -->
+            <div class="crop-card" data-season="annual">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR72d2ssRq1AOTKJRnY7KWStid064k30HmcDg&s" alt="Coffee" class="crop-image">
+                <div class="crop-info">
+                    <h2>Coffee <span class="season-tag annual">Annual</span></h2>
+                    <p><strong>Growing Season:</strong> Year-round</p>
+                    <p><strong>Major States:</strong> Karnataka, Kerala, Tamil Nadu</p>
+                    <p><strong>Facts:</strong> India produces both Arabica and Robusta varieties. Grown in Western Ghats.</p>
+                </div>
+            </div>
+
+            <!-- Mustard (Rabi) -->
+            <div class="crop-card" data-season="rabi">
+                <img src="https://www.thespruce.com/thmb/s6RkaDbat6u0CyduvXEeHcNBv3A=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/mustard-plant-growing-guide-7377609_01-7dd11987305340b7a79f41d359514096.jpg" alt="Mustard" class="crop-image">
+                <div class="crop-info">
+                    <h2>Mustard <span class="season-tag rabi">Rabi</span></h2>
+                    <p><strong>Growing Season:</strong> October to March</p>
+                    <p><strong>Major States:</strong> Rajasthan, Haryana, Madhya Pradesh</p>
+                    <p><strong>Facts:</strong> Primary source of edible oil in North India. Bright yellow flowers are iconic.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2025 KrishiBazzar. All Rights Reserved.</p>
+                <ul class="footer-links">
+                    <li><a href="">Terms and Conditions</a></li>
+                    <li><a href="">Privacy Policy</a></li>
+                    <li><a href="">Contact Us</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+
+    <script src="crop.js">
+            function filterCrops(season) {
+            const crops = document.querySelectorAll('.crop-card');
+            crops.forEach(crop => {
+                if (season === 'all' || crop.dataset.season.includes(season)) {
+                    crop.style.display = 'flex';
+                } else {
+                    crop.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>

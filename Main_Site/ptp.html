@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Soil Advisor</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #3a5a40;
+            --secondary: #588157;
+            --accent: #a3b18a;
+            --dark: #344e41;
+            --light: #f8f9fa;
+            --highlight: #dad7cd;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light);
+            color: #333;
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        /* Side Navigation */
+        .side-nav {
+            width: 250px;
+            background: var(--dark);
+            color: white;
+            padding: 20px 0;
+            position: fixed;
+            height: 100vh;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+        }
+        
+        .nav-header {
+            padding: 0 20px 20px;
+            border-bottom: 1px solid var(--accent);
+        }
+        
+        .nav-menu {
+            list-style: none;
+            padding: 0;
+            margin-top: 20px;
+        }
+        
+        .nav-item {
+            padding: 15px 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .nav-item:hover, .nav-item.active {
+            background: var(--secondary);
+        }
+        
+        .nav-item i {
+            width: 20px;
+            text-align: center;
+        }
+        
+        /* Main Content */
+        .main-content {
+            margin-left: 250px;
+            flex: 1;
+            padding: 20px 40px;
+        }
+        
+        /* Header */
+        .page-header {
+            background: linear-gradient(135deg, var(--primary), var(--dark));
+            color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* Interactive Soil Cards */
+        .cards-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin: 2rem 0;
+        }
+        
+        .soil-card {
+            width: 200px;
+            height: 200px;
+            background: white;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+        }
+        
+        .soil-card:hover {
+            transform: scale(1.1);
+            z-index: 10;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+        
+        .soil-card:hover ~ .soil-card {
+            transform: translateX(40px);
+        }
+        
+        .soil-card:has(~ .soil-card:hover) {
+            transform: translateX(-40px);
+        }
+        
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+            transition: all 0.3s;
+        }
+        
+        .soil-card:hover .card-icon {
+            transform: scale(1.2);
+        }
+        
+        .card-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--dark);
+            text-align: center;
+            transition: all 0.3s;
+        }
+        
+        .soil-card:hover .card-title {
+            color: var(--secondary);
+        }
+        
+        /* Detailed View */
+        .detailed-view {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        .back-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .back-btn:hover {
+            background: var(--secondary);
+        }
+        
+        .detailed-content-section {
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+        
+        .detailed-content-section h2 {
+            color: var(--primary);
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 10px;
+        }
+        
+        .soil-feature {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 4px solid var(--accent);
+        }
+        
+        .improvement-tips {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Calculator */
+        .calculator {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .btn:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+        }
+        
+        /* Results */
+        .results {
+            background: var(--highlight);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-top: 1rem;
+            display: none;
+        }
+        
+        /* MySoilinfo Portal */
+        .soilinfo-portal {
+            display: none;
+        }
+        
+        .soilinfo-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .location-search {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .location-search input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        
+        .soilinfo-response {
+            background: #f5f5f5;
+            padding: 1rem;
+            border-radius: 5px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .side-nav {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .soil-card {
+                width: 150px;
+                height: 150px;
+            }
+            
+            .soil-card:hover {
+                transform: scale(1.05);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Side Navigation -->
+    <nav class="side-nav">
+        <div class="nav-header">
+            <h2><i class="fas fa-seedling"></i> Soil Advisor</h2>
+        </div>
+        <ul class="nav-menu">
+            <li class="nav-item active" onclick="showSection('soil-info')">
+                <i class="fas fa-book"></i> Soil Encyclopedia
+            </li>
+            <li class="nav-item" onclick="showSection('calculator')">
+                <i class="fas fa-calculator"></i> Soil Calculator
+            </li>
+            <li class="nav-item" onclick="showSection('soilinfo-portal')">
+                <i class="fas fa-database"></i> MySoilinfo
+            </li>
+        </ul>
+    </nav>
+    
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Soil Information Section -->
+        <section id="soil-info">
+            <div class="page-header">
+                <h1><i class="fas fa-book-open"></i> Soil Encyclopedia</h1>
+                <p>Click on any card to view detailed information</p>
+            </div>
+            
+            <div class="cards-container">
+                <!-- Soil Types Card -->
+                <div class="soil-card" onclick="showCardDetails('soil-types')">
+                    <div class="card-icon"><i class="fas fa-layer-group"></i></div>
+                    <h3 class="card-title">Soil Types</h3>
+                </div>
+                
+                <!-- Properties Card -->
+                <div class="soil-card" onclick="showCardDetails('properties')">
+                    <div class="card-icon"><i class="fas fa-flask"></i></div>
+                    <h3 class="card-title">Properties</h3>
+                </div>
+                
+                <!-- Crops Card -->
+                <div class="soil-card" onclick="showCardDetails('crops')">
+                    <div class="card-icon"><i class="fas fa-leaf"></i></div>
+                    <h3 class="card-title">Crop Guide</h3>
+                </div>
+                
+                <!-- Water Card -->
+                <div class="soil-card" onclick="showCardDetails('water')">
+                    <div class="card-icon"><i class="fas fa-tint"></i></div>
+                    <h3 class="card-title">Water</h3>
+                </div>
+                
+                <!-- Testing Card -->
+                <div class="soil-card" onclick="showCardDetails('testing')">
+                    <div class="card-icon"><i class="fas fa-chart-line"></i></div>
+                    <h3 class="card-title">Testing</h3>
+                </div>
+                
+                <!-- Contaminants Card -->
+                <div class="soil-card" onclick="showCardDetails('contaminants')">
+                    <div class="card-icon"><i class="fas fa-biohazard"></i></div>
+                    <h3 class="card-title">Contaminants</h3>
+                </div>
+            </div>
+            
+            <!-- Detailed View Container -->
+            <div id="detailed-view" class="detailed-view">
+                <button class="back-btn" onclick="hideCardDetails()">
+                    <i class="fas fa-arrow-left"></i> Back to Cards
+                </button>
+                <div id="detailed-content"></div>
+            </div>
+        </section>
+        
+        <!-- Soil Calculator Section -->
+        <section id="calculator" style="display: none;">
+            <div class="page-header">
+                <h1><i class="fas fa-calculator"></i> Soil Quality Calculator</h1>
+                <p>Calculate your soil's health score and get improvement recommendations</p>
+            </div>
+            
+            <div class="calculator">
+                <div class="form-group">
+                    <label for="calc-soil-type">Soil Type</label>
+                    <select id="calc-soil-type" class="form-control">
+                        <option value="sandy">Sandy</option>
+                        <option value="loamy">Loamy</option>
+                        <option value="clay">Clay</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="calc-ph">pH Level (1-14)</label>
+                    <input type="number" id="calc-ph" min="1" max="14" step="0.1" class="form-control" placeholder="6.5">
+                </div>
+                
+                <div class="form-group">
+                    <label for="calc-organic">Organic Matter (%)</label>
+                    <input type="number" id="calc-organic" min="0" max="100" step="0.1" class="form-control" placeholder="5">
+                </div>
+                
+                <div class="form-group">
+                    <label for="calc-moisture">Moisture Retention (1-10)</label>
+                    <input type="number" id="calc-moisture" min="1" max="10" class="form-control" placeholder="5">
+                </div>
+                
+                <button class="btn" onclick="calculateSoilQuality()"><i class="fas fa-calculator"></i> Calculate Soil Quality</button>
+                
+                <div class="results" id="calc-results">
+                    <h3>Soil Quality Score: <span id="quality-score">0</span>/100</h3>
+                    <p id="quality-text">Quality description</p>
+                    <h4>Recommendations:</h4>
+                    <ul id="quality-recommendations">
+                        <!-- Filled by JavaScript -->
+                    </ul>
+                </div>
+            </div>
+        </section>
+        
+        <!-- MySoilinfo Portal -->
+        <section id="soilinfo-portal" class="soilinfo-portal">
+            <div class="page-header">
+                <h1><i class="fas fa-database"></i> MySoilinfo</h1>
+                <p>Search soil information by location name</p>
+            </div>
+            
+            <div class="soilinfo-container">
+                <div class="location-search">
+                    <input type="text" id="location-input" placeholder="Enter city, region, or address">
+                    <button class="btn" onclick="searchLocation()"><i class="fas fa-search"></i> Search</button>
+                    <button class="btn" onclick="getCurrentLocation()"><i class="fas fa-map-marker-alt"></i> My Location</button>
+                </div>
+                
+                <div class="form-group">
+                    <label for="soil-properties">Properties to Fetch</label>
+                    <input type="text" id="soil-properties" class="form-control" value="phh2o,oc,clay,silt,sand">
+                </div>
+                
+                <h3>Soil Data:</h3>
+                <div class="soilinfo-response" id="soilinfo-response">
+                    {/* Response will appear here */}
+                </div>
+                
+                <div style="margin-top: 2rem;">
+                    <h3>About MySoilinfo</h3>
+                    <p>This service provides soil data including:</p>
+                    <ul>
+                        <li><strong>phh2o</strong>: Soil pH in water</li>
+                        <li><strong>oc</strong>: Organic carbon content</li>
+                        <li><strong>clay/silt/sand</strong>: Soil texture fractions</li>
+                        <li><strong>bdod</strong>: Bulk density</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </div>
+    
+    <script>
+        // Show different sections
+        function showSection(sectionId) {
+            document.getElementById('soil-info').style.display = 'none';
+            document.getElementById('calculator').style.display = 'none';
+            document.getElementById('soilinfo-portal').style.display = 'none';
+            
+            document.getElementById(sectionId).style.display = 'block';
+            
+            // Update active nav item
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+            
+            // Hide detailed view if switching sections
+            document.getElementById('detailed-view').style.display = 'none';
+            document.querySelector('.cards-container').style.display = 'flex';
+        }
+        
+        // Card details display functions
+        function showCardDetails(cardType) {
+            // Hide all cards
+            document.querySelector('.cards-container').style.display = 'none';
+            
+            // Show detailed view
+            const detailedView = document.getElementById('detailed-view');
+            const contentDiv = document.getElementById('detailed-content');
+            
+            // Set content based on card type
+            switch(cardType) {
+                case 'soil-types':
+                    contentDiv.innerHTML = `
+                        <div class="detailed-content-section">
+                            <h2><i class="fas fa-layer-group"></i> Soil Types</h2>
+                            
+                            <div class="soil-feature">
+                                <h3>Sandy Soil</h3>
+                                <p><strong>Characteristics:</strong></p>
+                                <ul>
+                                    <li>Large particle size (0.05-2mm diameter)</li>
+                                    <li>Low water retention (drains within hours)</li>
+                                    <li>Low nutrient holding capacity</li>
+                                    <li>Warms up quickly in spring</li>
+                                </ul>
+                                <p><strong>Best Crops:</strong></p>
+                                <ul>
+                                    <li>Root vegetables (carrots, potatoes)</li>
+                                    <li>Lettuce and leafy greens</li>
+                                    <li>Strawberries</li>
+                                    <li>Corn</li>
+                                </ul>
+                                <div class="improvement-tips">
+                                    <p><strong>Improvement Tips:</strong></p>
+                                    <ul>
+                                        <li>Add 2-3 inches of organic matter annually</li>
+                                        <li>Use drip irrigation for efficient watering</li>
+                                        <li>Apply mulch to reduce evaporation</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <div class="soil-feature">
+                                <h3>Clay Soil</h3>
+                                <p><strong>Characteristics:</strong></p>
+                                <ul>
+                                    <li>Very small particle size (<0.002mm)</li>
+                                    <li>High water retention (takes days to drain)</li>
+                                    <li>Rich in nutrients but often locked up</li>
+                                    <li>Slow to warm in spring</li>
+                                </ul>
+                                <p><strong>Best Crops:</strong></p>
+                                <ul>
+                                    <li>Rice (thrives in waterlogged conditions)</li>
+                                    <li>Cabbage family (kale, broccoli)</li>
+                                    <li>Fruit trees (apple, pear)</li>
+                                    <li>Legumes (beans, peas)</li>
+                                </ul>
+                                <div class="improvement-tips">
+                                    <p><strong>Improvement Tips:</strong></p>
+                                    <ul>
+                                        <li>Add gypsum to improve structure</li>
+                                        <li>Incorporate sand and organic matter</li>
+                                        <li>Avoid working when wet to prevent compaction</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <div class="soil-feature">
+                                <h3>Loamy Soil</h3>
+                                <p><strong>Characteristics:</strong></p>
+                                <ul>
+                                    <li>Ideal balance of sand (40%), silt (40%), clay (20%)</li>
+                                    <li>Perfect water retention (drains in 1-2 days)</li>
+                                    <li>Excellent nutrient availability</li>
+                                    <li>Easy to work with</li>
+                                </ul>
+                                <p><strong>Best Crops:</strong></p>
+                                <ul>
+                                    <li>Tomatoes, peppers, eggplants</li>
+                                    <li>Berries (strawberries, raspberries)</li>
+                                    <li>Most fruit trees</li>
+                                    <li>Flowers and ornamentals</li>
+                                </ul>
+                                <div class="improvement-tips">
+                                    <p><strong>Maintenance Tips:</strong></p>
+                                    <ul>
+                                        <li>Add 1-2 inches of compost annually</li>
+                                        <li>Practice crop rotation</li>
+                                        <li>Use organic mulch to maintain moisture</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    break;
+                    
+                case 'properties':
+                    contentDiv.innerHTML = `
+                        <div class="detailed-content-section">
+                            <h2><i class="fas fa-flask"></i> Soil Properties</h2>
+                            
+                            <div class="soil-feature">
+                                <h3>pH Level</h3>
+                                <p>Measures acidity/alkalinity on a scale from 0 (most acidic) to 14 (most alkaline).</p>
+                                
+                                <h4>Acidic Soil (pH 0-6.5)</h4>
+                                <ul>
+                                    <li><strong>Formation:</strong> Common in high rainfall areas</li>
+                                    <li><strong>Nutrient Availability:</strong> High in iron, aluminum, manganese</li>
+                                    <li><strong>Adjustment:</strong> Add lime (2-5 tons/acre)</li>
+                                    <li><strong>Ideal Plants:</strong> Blueberries, potatoes, rhododendrons</li>
+                                </ul>
+                                
+                                <h4>Neutral Soil (pH 6.5-7.5)</h4>
+                                <ul>
+                                    <li><strong>Characteristics:</strong> Maximum nutrient availability</li>
+                                    <li><strong>Microbial Activity:</strong> Most active in this range</li>
+                                    <li><strong>Ideal Plants:</strong> Most vegetables, lawn grasses, fruit trees</li>
+                                </ul>
+                                
+                                <h4>Alkaline Soil (pH 7.5-14)</h4>
+                                <ul>
+                                    <li><strong>Formation:</strong> Common in arid regions</li>
+                                    <li><strong>Nutrient Availability:</strong> Iron, zinc become less available</li>
+                                    <li><strong>Adjustment:</strong> Add sulfur or acidic organic matter</li>
+                                    <li><strong>Ideal Plants:</strong> Asparagus, cabbage, lilacs</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="soil-feature">
+                                <h3>Organic Matter</h3>
+                                <ul>
+                                    <li><strong>Ideal Percentage:</strong> 5-8% of soil composition</li>
+                                    <li><strong>Sources:</strong> Compost, manure, cover crops, leaf mold</li>
+                                    <li><strong>Benefits:</strong>
+                                        <ul>
+                                            <li>Improves water retention in sandy soils</li>
+                                            <li>Enhances drainage in clay soils</li>
+                                            <li>Provides food for beneficial microorganisms</li>
+                                        </ul>
+                                    </li>
+                                    <li><strong>Maintenance:</strong> Add 1-3 inches annually to maintain levels</li>
+                                </ul>
+                            </div>
+                        </div>
+                    `;
+                    break;
+                    
+                case 'crops':
+                    contentDiv.innerHTML = `
+                        <div class="detailed-content-section">
+                            <h2><i class="fas fa-leaf"></i> Crop Compatibility Guide</h2>
+                            
+                            <div class="soil-feature">
+                                <h3>Acidic Soil (pH < 6.5)</h3>
+                                <ul>
+                                    <li><strong>Fruits:</strong> Blueberries, cranberries, elderberries</li>
+                                    <li><strong>Vegetables:</strong> Potatoes, sweet potatoes, radishes</li>
+                                    <li><strong>Ornamentals:</strong> Azaleas, rhododendrons, camellias</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="soil-feature">
+                                <h3>Neutral Soil (pH 6.5-7.5)</h3>
+                                <ul>
+                                    <li><strong>Vegetables:</strong> Tomatoes, carrots, broccoli, most garden vegetables</li>
+                                    <li><strong>Fruits:</strong> Apples, strawberries, grapes</li>
+                                    <li><strong>Grains:</strong> Wheat, corn, barley</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="soil-feature">
+                                <h3>Alkaline Soil (pH > 7.5)</h3>
+                                <ul>
+                                    <li><strong>Vegetables:</strong> Asparagus, cabbage, cauliflower</li>
+                                    <li><strong>Ornamentals:</strong> Lilacs, clematis, lavender</li>
+                                    <li><strong>Fruits:</strong> Figs, pomegranates</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="improvement-tips">
+                                <h3>Adjusting Soil for Crops</h3>
+                                <ul>
+                                    <li><strong>To Lower pH:</strong> Elemental sulfur (10 lbs/100 sq ft to lower 1 point)</li>
+                                    <li><strong>To Raise pH:</strong> Lime (varies by soil type)</li>
+                                    <li><strong>Container Solution:</strong> Use customized potting mixes</li>
+                                </ul>
+                            </div>
+                        </div>
+                    `;
+                    break;
+                    
+                case 'water':
+                    contentDiv.innerHTML = `
+                        <div class="detailed-content-section">
+                            <h2><i class="fas fa-tint"></i> Water Management</h2>
+                            
+                            <div class="soil-feature">
+                                <h3>Sandy Soil Water Characteristics</h3>
+                                <ul>
+                                    <li><strong>Infiltration Rate:</strong> 2+ inches per hour</li>
+                                    <li><strong>Water Holding Capacity:</strong> 0.5-1 inch per foot</li>
+                                    <li><strong>Irrigation Needs:</strong> Frequent, light watering (every 2-3 days)</li>
+                                </ul>
+                                <div class="improvement-tips">
+                                    <p><strong>Improvement Strategies:</strong></p>
+                                    <ul>
+                                        <li>Add organic matter to increase water retention</li>
+                                        <li>Use drip irrigation to minimize evaporation</li>
+                                        <li>Apply mulch to reduce surface drying</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <div class="soil-feature">
+                                <h3>Clay Soil Water Characteristics</h3>
+                                <ul>
+                                    <li><strong>Infiltration Rate:</strong> 0.1-0.5 inches per hour</li>
+                                    <li><strong>Water Holding Capacity:</strong> 1.5-2.5 inches per foot</li>
+                                    <li><strong>Irrigation Needs:</strong> Deep, infrequent watering (weekly)</li>
+                                </ul>
+                                <div class="improvement-tips">
+                                    <p><strong>Improvement Strategies:</strong></p>
+                                    <ul>
+                                        <li>Incorporate gypsum to improve structure</li>
+                                        <li>Install drainage in problem areas</li>
+                                        <li>Use raised beds for better drainage</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    break;
+                    
+                case 'testing':
+                    contentDiv.innerHTML = `
+                        <div class="detailed-content-section">
+                            <h2><i class="fas fa-chart-line"></i> Soil Testing</h2>
+                            
+                            <div class="soil-feature">
+                                <h3>When to Test</h3>
+                                <ul>
+                                    <li>Before establishing new gardens</li>
+                                    <li>Every 2-3 years for established gardens</li>
+                                    <li>When plants show nutrient deficiencies</li>
+                                    <li>Before making major amendments</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="soil-feature">
+                                <h3>What to Test For</h3>
+                                <ul>
+                                    <li><strong>Basic Test:</strong> pH, organic matter, primary nutrients (N-P-K)</li>
+                                    <li><strong>Advanced Test:</strong> Micronutrients, heavy metals, CEC</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="improvement-tips">
+                                <h3>DIY Test Options</h3>
+                                <ul>
+                                    <li><strong>Jar Test:</strong> For texture analysis</li>
+                                    <li><strong>Vinegar/Baking Soda:</strong> Rough pH indication</li>
+                                    <li><strong>Professional Labs:</strong> Most accurate option</li>
+                                </ul>
+                            </div>
+                        </div>
+                    `;
+                    break;
+                    
+                case 'contaminants':
+                    contentDiv.innerHTML = `
+                        <div class="detailed-content-section">
+                            <h2><i class="fas fa-biohazard"></i> Soil Contaminants</h2>
+                            
+                            <div class="soil-feature">
+                                <h3>Common Contaminants</h3>
+                                <ul>
+                                    <li><strong>Heavy Metals:</strong> Lead, cadmium, arsenic</li>
+                                    <li><strong>Petroleum Products:</strong> Gasoline, motor oil</li>
+                                    <li><strong>Pesticides:</strong> Both historical and modern</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="soil-feature">
+                                <h3>Testing for Contaminants</h3>
+                                <ul>
+                                    <li>Near old buildings (lead paint)</li>
+                                    <li>Former industrial sites</li>
+                                    <li>When growing edibles in urban areas</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="improvement-tips">
+                                <h3>Safe Gardening Practices</h3>
+                                <ul>
+                                    <li>Add clean compost to dilute contaminants</li>
+                                    <li>Use raised beds with clean soil</li>
+                                    <li>Wash produce thoroughly</li>
+                                </ul>
+                            </div>
+                        </div>
+                    `;
+                    break;
+            }
+            
+            detailedView.style.display = 'block';
+        }
+        
+        function hideCardDetails() {
+            document.querySelector('.cards-container').style.display = 'flex';
+            document.getElementById('detailed-view').style.display = 'none';
+        }
+        
+        // Soil Quality Calculator
+        function calculateSoilQuality() {
+            const soilType = document.getElementById('calc-soil-type').value;
+            const ph = parseFloat(document.getElementById('calc-ph').value) || 7;
+            const organic = parseFloat(document.getElementById('calc-organic').value) || 5;
+            const moisture = parseInt(document.getElementById('calc-moisture').value) || 5;
+            
+            // Calculate score (0-100)
+            let score = 0;
+            
+            // pH contributes up to 30 points (ideal: 6-7)
+            if (ph >= 6 && ph <= 7) score += 30;
+            else if (ph >= 5.5 && ph <= 7.5) score += 20;
+            else score += 10;
+            
+            // Organic matter contributes up to 25 points (ideal: 5-8%)
+            if (organic >= 5 && organic <= 8) score += 25;
+            else if (organic > 8) score += 15;
+            else score += organic * 3; // 3 points per % below 5
+            
+            // Soil type contributes up to 25 points
+            if (soilType === 'loamy') score += 25;
+            else if (soilType === 'clay') score += 20;
+            else score += 15;
+            
+            // Moisture contributes up to 20 points
+            score += moisture * 2;
+            
+            // Cap at 100
+            score = Math.min(100, score);
+            
+            // Display results
+            document.getElementById('quality-score').textContent = score;
+            document.getElementById('calc-results').style.display = 'block';
+            
+            // Quality description
+            let qualityText = '';
+            if (score >= 80) qualityText = 'Excellent soil quality!';
+            else if (score >= 60) qualityText = 'Good soil quality';
+            else if (score >= 40) qualityText = 'Fair soil quality';
+            else qualityText = 'Poor soil quality - needs improvement';
+            
+            document.getElementById('quality-text').textContent = qualityText;
+            
+            // Generate recommendations
+            let recommendations = [];
+            
+            // pH recommendations
+            if (ph < 6) {
+                recommendations.push('Add lime to raise pH (target 6.0-7.0)');
+            } else if (ph > 7.5) {
+                recommendations.push('Add sulfur or organic matter to lower pH');
+            }
+            
+            // Organic matter recommendations
+            if (organic < 5) {
+                recommendations.push('Add compost or manure to increase organic matter');
+            }
+            
+            // Soil type specific recommendations
+            if (soilType === 'sandy') {
+                recommendations.push('Add organic matter to improve water retention');
+            } else if (soilType === 'clay') {
+                recommendations.push('Add sand or organic matter to improve drainage');
+            }
+            
+            // Display recommendations
+            const recList = recommendations.map(r => `<li>${r}</li>`).join('');
+            document.getElementById('quality-recommendations').innerHTML = recList || '<li>No specific recommendations needed</li>';
+        }
+        
+        // MySoilinfo functions
+        async function searchLocation() {
+            const location = document.getElementById('location-input').value;
+            const properties = document.getElementById('soil-properties').value;
+            
+            if (!location) {
+                alert('Please enter a location');
+                return;
+            }
+            
+            try {
+                document.getElementById('soilinfo-response').textContent = 'Fetching soil data for: ' + location + '...';
+                
+                // Simulate API call delay
+                setTimeout(() => {
+                    const mockResponse = {
+                        location: location,
+                        coordinates: {
+                            lat: 37.7749 + (Math.random() * 0.1 - 0.05),
+                            lon: -122.4194 + (Math.random() * 0.1 - 0.05)
+                        },
+                        properties: {
+                            phh2o: (6.5 + (Math.random() * 1 - 0.5)).toFixed(1),
+                            oc: (5 + (Math.random() * 3 - 1.5)).toFixed(1),
+                            clay: (20 + (Math.random() * 30 - 15)).toFixed(0),
+                            silt: (40 + (Math.random() * 30 - 15)).toFixed(0),
+                            sand: (40 + (Math.random() * 30 - 15)).toFixed(0)
+                        },
+                        timestamp: new Date().toISOString()
+                    };
+                    
+                    document.getElementById('soilinfo-response').textContent = JSON.stringify(mockResponse, null, 2);
+                }, 1500);
+                
+            } catch (error) {
+                document.getElementById('soilinfo-response').textContent = 'Error fetching data: ' + error.message;
+            }
+        }
+        
+        function getCurrentLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const lat = position.coords.latitude;
+                        const lon = position.coords.longitude;
+                        
+                        document.getElementById('location-input').value = 'Your Current Location';
+                        searchLocation();
+                    },
+                    (error) => {
+                        alert('Error getting location: ' + error.message);
+                    }
+                );
+            } else {
+                alert('Geolocation is not supported by your browser');
+            }
+        }
+    </script>
+</body>
+</html>

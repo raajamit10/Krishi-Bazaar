@@ -1,0 +1,268 @@
+/* General Styles */
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f8f4;
+    color: #333;
+}
+
+/* Container */
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: auto;
+}
+
+/* Header */
+header {
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.3)), 
+                url('https://cdn.downtoearth.org.in/library/large/2022-06-09/0.06974800_1654779705_istock-503646746.jpg');
+    background-size: cover;
+    background-position: center;
+    color: #fff;
+    text-align: center;
+    padding: 80px 20px;
+}
+
+.logo {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #ffcc29;
+}
+
+.hero h1 {
+    font-size: 3rem;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.btn {
+    display: inline-block;
+    background-color: #ffcc29;
+    color: #333;
+    padding: 12px 24px;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 25px;
+    transition: 0.3s;
+    box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.btn:hover {
+    background-color: #ffb300;
+    transform: scale(1.05);
+}
+
+/* Navigation */
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+}
+
+.nav-links {
+    list-style: none;
+    padding: 0;
+    display: flex;
+}
+
+.nav-links li {
+    margin: 0 15px;
+}
+
+.nav-links a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.nav-links a:hover {
+    color: #ffcc29;
+}
+
+/* Dashboard */
+.dashboard {
+    text-align: center;
+    padding: 40px 0;
+    background: #e8f5e9;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.dashboard-card {
+    background: #fff;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    transition: transform 0.3s;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-8px);
+}
+
+.dashboard-icon i {
+    font-size: 3rem;
+    color: #4CAF50;
+    transition: color 0.3s;
+}
+
+.dashboard-card:hover .dashboard-icon i {
+    color: #388E3C;
+}
+
+/* Chatbot Styles */
+.chatbot-toggler {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #ffcc29;
+    color: #333;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+}
+
+.chatbot-toggler:hover {
+    background: #ffb300;
+}
+
+.chatbot-container {
+    display: none;
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    width: 320px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    z-index: 1000;
+}
+
+.chatbot-header {
+    background: #4CAF50;
+    color: #fff;
+    padding: 15px;
+    text-align: center;
+    font-weight: bold;
+    position: relative;
+}
+
+.chatbot-body {
+    padding: 12px;
+    height: 300px;
+    overflow-y: auto;
+    background: #f1f8e9;
+}
+
+.chatbot-input {
+    display: flex;
+    padding: 12px;
+    border-top: 1px solid #ddd;
+    background: #fff;
+}
+
+.chatbot-input input {
+    flex: 1;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    outline: none;
+    border-radius: 20px;
+}
+
+.chatbot-input button {
+    background: #4CAF50;
+    color: #fff;
+    border: none;
+    padding: 8px 15px;
+    margin-left: 8px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.chatbot-input button:hover {
+    background: #388E3C;
+}
+
+.close-btn {
+    background: transparent;
+    border: none;
+    color: white;
+    position: absolute;
+    right: 10px;
+    top: 12px;
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+
+/* Message Styles */
+.message {
+    padding: 8px 12px;
+    margin: 8px;
+    border-radius: 12px;
+    max-width: 80%;
+    word-wrap: break-word;
+    font-size: 0.9rem;
+}
+
+.user-message {
+    background: #4CAF50;
+    color: white;
+    margin-left: auto;
+    border-bottom-right-radius: 4px;
+}
+
+.bot-message {
+    background: #e0e0e0;
+    color: #333;
+    margin-right: auto;
+    border-bottom-left-radius: 4px;
+}
+
+/* Footer */
+footer {
+    background: #2E7D32;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    margin-top: 40px;
+}
+
+.footer-links {
+    list-style: none;
+    padding: 0;
+    margin-top: 10px;
+}
+
+.footer-links li {
+    display: inline;
+    margin: 0 15px;
+}
+
+.footer-links a {
+    color: white;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.footer-links a:hover {
+    text-decoration: underline;
+}
